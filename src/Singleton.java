@@ -17,4 +17,22 @@ public class Singleton {
         }
         return uniqueInstance;
     }
+
+    public static void main(String[] args) throws InterruptedException {
+        Thread[] threads = new Thread[10];
+
+        for (int i = 0; i < threads.length; i++) {
+            threads[i] = new Thread(() -> {
+                Singleton singleton = Singleton.getUniqueInstance();
+                System.out.println(Thread.currentThread().getName()
+                        + " -> "
+                        + System.identityHashCode(singleton));
+            }, "thread-" + i);
+            threads[i].start();
+        }
+
+        for (Thread thread : threads) {
+            thread.join();
+        }
+    }
 }
